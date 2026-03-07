@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cosmera</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #020412;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 20px;
+            right: 40px;
+            background: rgba(255, 255, 255, .03);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 12px 30px;
+            border: 1px solid rgba(255, 255, 255, .1);
+            z-index: 1000;
+        }
+
+        nav a {
+            color: #9fd3ff;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* LOGO */
+        .top-left-logo {
+            position: fixed;
+            top: 20px;
+            left: 40px;
+            z-index: 1001;
+        }
+
+        .top-left-logo img {
+            height: 70px
+        }
+
+        /* HERO */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(2, 4, 18, .7), rgba(2, 4, 18, .7)),
+                url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564") center/cover;
+        }
+
+        .hero h1 {
+            font-size: 80px;
+            margin: 0;
+            background: linear-gradient(to right, #fff, #9fd3ff, #6a7cff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: #cfe8ff
+        }
+
+        /* SECTIONS */
+        .section {
+            display: flex;
+            gap: 60px;
+            padding: 100px 12%;
+            align-items: center;
+        }
+
+        .section:nth-child(even) {
+            flex-direction: row-reverse;
+            background: #040826
+        }
+
+        .section img {
+            width: 50%;
+            border-radius: 20px
+        }
+
+        .section .text {
+            width: 50%
+        }
+
+        .section h2 {
+            color: #9fd3ff;
+            font-size: 42px
+        }
+
+        /* LUMINA PANEL BUTTON */
+        #chat-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #6a7cff, #4a5eff);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(106, 124, 255, 0.4);
+            font-size: 24px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* LUMINA PANEL - GLASSMORPHISM */
+        #chat-box {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 400px;
+            height: 600px;
+            background: rgba(11, 16, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+            pointer-events: none;
+            transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        #chat-box.open {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #chat-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #chat-header::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+        }
+
+        /* MESSAGE BUBBLES */
+        .msg {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.6;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-msg {
+            align-self: flex-end;
+            background: #6a7cff;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-msg {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .bot-msg b {
+            color: #9fd3ff;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #chat-input-area {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px 20px;
+            gap: 10px;
+        }
+
+        #chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            font-size: 14px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        #chat-input:focus {
+            border-color: #6a7cff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        #stop-btn {
+            background: rgba(255, 77, 77, 0.15);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            color: #ff4d4d;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #stop-btn:hover {
+            background: #ff4d4d;
+            color: white;
+        }
+    </style>
+
+    <style>
+        /* ... existing styles ... */
+
+        /* IDENTIFY SECTION */
+        .lumina {
+            text-align: center;
+            padding: 100px 12%;
+            background: #020412;
+        }
+
+        .lumina h2 {
+            color: #9fd3ff;
+            font-size: 42px;
+        }
+
+        .lumina p {
+            color: #cfe8ff;
+            font-size: 18px;
+        }
+
+        .upload {
+            margin-top: 40px;
+        }
+
+        .upload input {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #6a7cff;
+            background: #05081a;
+            color: white;
+        }
+
+        .upload button {
+            margin-top: 12px;
+            padding: 10px 20px;
+            background: #6a7cff;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .upload button:hover {
+            background: #5568e6;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #05081a;
+            border-radius: 12px;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        #result h3 {
+            color: #9fd3ff;
+            margin-bottom: 10px;
+        }
+
+        #result p {
+            color: #cfe8ff;
+            font-size: 16px;
+        }
+
+        #note {
+            margin-top: 15px;
+            color: #ff4d4d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a class="top-left-logo">
+        <img src="cosmera-logo.png">
+    </a>
+
+    <nav>
+        <a href="#learn">Learn</a>
+        <a href="#identify">Identify</a>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <h1>Cosmera</h1>
+            <p>Intelligence beyond the stars</p>
+        </div>
+    </section>
+
+    <section class="section" id="learn">
+        <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa">
+        <div class="text">
+            <h2>Galaxies</h2>
+            <p>Massive systems of stars, gas and dark matter bound by gravity.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca">
+        <div class="text">
+            <h2>Nebulae</h2>
+            <p>Cosmic clouds where stars form and evolve.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d">
+        <div class="text">
+            <h2>Stars</h2>
+            <p>Luminous spheres powered by nuclear fusion.</p>
+        </div>
+    </section>
+
+    <section class="lumina" id="identify">
+        <h2>Identify Cosmic Object</h2>
+        <p>Upload an image and let Lumina analyze it</p>
+
+        <div class="upload">
+            <input type="file" id="imageInput"><br>
+            <button onclick="sendImage()">Identify with Lumina</button>
+        </div>
+
+        <div id="result"></div>
+        <div id="note">Lumina can sometimes make mistakes.</div>
+    </section>
+
+    <div id="chat-button">💬</div>
+
+    <div id="chat-box">
+        <div id="chat-header">Lumina Assistant</div>
+        <div id="chat-messages"></div>
+
+        <div id="chat-input-area">
+            <input id="chat-input" placeholder="Ask astronomy only...">
+            <button id="stop-btn">⏹</button>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById("chat-button");
+        const box = document.getElementById("chat-box");
+        const input = document.getElementById("chat-input");
+        const messages = document.getElementById("chat-messages");
+        const stopBtn = document.getElementById("stop-btn");
+
+        let controller = null;
+        let introduced = false;
+
+        /* OPEN PANEL */
+        btn.onclick = () => {
+            box.classList.toggle("open");
+
+            if (!introduced) {
+                const welcome = document.createElement("div");
+                welcome.className = "msg bot-msg";
+                welcome.innerHTML = "<b>Lumina</b> Hello! I'm your astronomy assistant. How can I help you explore the cosmos today?";
+                messages.appendChild(welcome);
+                introduced = true;
+            }
+        };
+
+        /* SEND MESSAGE */
+        input.addEventListener("keypress", async e => {
+            if (e.key === "Enter") {
+                const text = input.value.trim();
+                if (!text) return;
+                input.value = "";
+                streamChat(text);
+            }
+        });
+
+        async function streamChat(text, isAuto = false) {
+            if (!isAuto) {
+                const userBubble = document.createElement("div");
+                userBubble.className = "msg user-msg";
+                userBubble.innerText = text;
+                messages.appendChild(userBubble);
+            }
+
+            const botBubble = document.createElement("div");
+            botBubble.className = "msg bot-msg";
+            botBubble.innerHTML = "<b>Lumina</b> ";
+            messages.appendChild(botBubble);
+
+            const contentSpan = document.createElement("span");
+            botBubble.appendChild(contentSpan);
+
+            messages.scrollTop = messages.scrollHeight;
+
+            controller = new AbortController();
+            stopBtn.style.display = "flex";
+
+            try {
+                const res = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: text }),
+                    signal: controller.signal
+                });
+
+                const reader = res.body.getReader();
+                const dec = new TextDecoder();
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    contentSpan.innerHTML += dec.decode(value, { stream: true });
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    contentSpan.innerHTML += " <br>⚠ <i>Connection lost</i>";
+                }
+            }
+
+            stopBtn.style.display = "none";
+        }
+
+        /* STOP */
+        stopBtn.onclick = () => {
+            if (controller) controller.abort();
+            stopBtn.style.display = "none";
+        };
+
+        async function sendImage() {
+            const fileInput = document.getElementById("imageInput");
+            const result = document.getElementById("result");
+
+            if (!fileInput.files.length) {
+                result.innerText = "Please select an image";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            result.innerText = "Lumina is analyzing...";
+
+            try {
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error("Server error");
+
+                const data = await response.json();
+                result.innerText = `Lumina identifies this as: ${data.prediction} (Confidence: ${Math.round(data.confidence * 100)}%)`;
+
+                // Integrate with Lumina AI for automatic explanation
+                if (!box.classList.contains("open")) {
+                    box.classList.add("open");
+                    introduced = true;
+                }
+                streamChat(`I just identified an object as a ${data.prediction}. Can you explain what that is?`, true);
+            } catch (err) {
+                result.innerText = "⚠ Identification failed. Is the server running?";
+            }
+        }
+    </script>
+
+
+
+</body>
+
+</html>

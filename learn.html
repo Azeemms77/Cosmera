@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Learn Astronomy</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: white;
+            background: #020412;
+            min-height: 100vh;
+        }
+
+        /* FLOATING NAVIGATION BAR */
+        nav {
+            position: fixed;
+            top: 20px;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            box-sizing: border-box;
+        }
+
+        nav a {
+            color: #9fd3ff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: 0.3s;
+            opacity: 0.8;
+        }
+
+        nav a:hover {
+            color: white;
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(159, 211, 255, 0.8);
+        }
+
+        /* TOP LEFT LOGO */
+        .top-left-logo {
+            position: fixed;
+            top: 20px;
+            left: 40px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .top-left-logo img {
+            height: 80px;
+            filter: drop-shadow(0 0 15px rgba(106, 124, 255, 0.8));
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #9fd3ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .top-left-logo:hover {
+            transform: scale(1.05);
+        }
+
+        /* LOGO SECTION */
+        .page-header {
+            padding-top: 100px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header img {
+            height: 140px;
+            filter: drop-shadow(0 0 15px rgba(120, 150, 255, 0.7));
+        }
+
+        .container {
+            padding: 0 10% 80px 10%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background: rgba(11, 15, 42, 0.6);
+            padding: 40px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(106, 124, 255, 0.1);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(106, 124, 255, 0.4);
+            background: rgba(11, 15, 42, 0.8);
+        }
+
+        h2 {
+            color: #9fd3ff;
+            font-size: 32px;
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 18px;
+            color: #cfe8ff;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="index.html" class="top-left-logo">
+        <img src="cosmera-logo.png" alt="Lumina Logo" onload="this.nextElementSibling.style.display='none'"
+            onerror="this.style.display='none'">
+        <span class="logo-text">Lumina</span>
+    </a>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="learn.html">Learn</a>
+        <a href="identify.html">Identify</a>
+    </nav>
+
+    <div style="padding-top: 150px;"></div>
+
+    <div class="container">
+
+        <div class="card">
+            <h2>Galaxies</h2>
+            <p>Galaxies are massive systems of stars, gas, and dark matter bound by gravity. Spiral galaxies have
+                rotating arms, while elliptical galaxies are smooth and rounded.</p>
+        </div>
+
+        <div class="card">
+            <h2>Nebulae</h2>
+            <p>Nebulae are vast clouds of gas and dust in space. They are often regions where new stars are born and can
+                appear colorful due to ionized gases.</p>
+        </div>
+
+        <div class="card">
+            <h2>Stars</h2>
+            <p>Stars are luminous spheres of plasma powered by nuclear fusion. They appear as bright point sources in
+                astronomical images.</p>
+        </div>
+
+        <div class="card">
+            <h2>Asteroids</h2>
+            <p>Asteroids are small rocky bodies orbiting the Sun, mostly found in the asteroid belt between Mars and
+                Jupiter.</p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
