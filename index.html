@@ -1,546 +1,925 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cosmera</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmera | Journey Through the Cosmos</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        html,
-        body {
+        :root {
+            --bg-deep: #020412;
+            --bg-dark: #05081a;
+            --accent-primary: #6a7cff;
+            --accent-secondary: #9fd3ff;
+            --accent-glow: rgba(106, 124, 255, 0.4);
+            --text-main: #e0e0e0;
+            --text-dim: #9fd3ff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition-smooth: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background: #020412;
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            overflow-x: hidden;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
-        /* NAV */
+        body {
+            background: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Global Effects --- */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #0a0e2a 0%, #020412 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* --- Navigation --- */
         nav {
             position: fixed;
-            top: 20px;
-            right: 40px;
-            background: rgba(255, 255, 255, .03);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: 12px 30px;
-            border: 1px solid rgba(255, 255, 255, .1);
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             z-index: 1000;
+            transition: var(--transition-smooth);
         }
 
-        nav a {
-            color: #9fd3ff;
+        nav.scrolled {
+            top: 10px;
+            width: 95%;
+            padding: 10px 30px;
+            background: rgba(5, 8, 26, 0.9);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
-            margin: 0 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .nav-logo img {
+            height: 35px;
+            filter: drop-shadow(0 0 10px var(--accent-primary));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
+            transition: 0.3s;
+            position: relative;
         }
 
-        /* LOGO */
-        .top-left-logo {
-            position: fixed;
-            top: 20px;
-            left: 40px;
-            z-index: 1001;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-primary);
+            transition: 0.3s;
         }
 
-        .top-left-logo img {
-            height: 70px
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
         }
 
-        /* HERO */
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* --- Hero Section --- */
         .hero {
             height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             text-align: center;
-            background: linear-gradient(rgba(2, 4, 18, .7), rgba(2, 4, 18, .7)),
-                url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564") center/cover;
+            padding: 0 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1920&q=80') center/cover;
+            opacity: 0.5;
+            z-index: -1;
+            transform: scale(1.1);
+            animation: pan 60s infinite linear;
+            background-attachment: fixed;
+        }
+
+        @keyframes pan {
+            0% { transform: scale(1.1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(1.4deg); }
+            100% { transform: scale(1.1) rotate(0deg); }
         }
 
         .hero h1 {
-            font-size: 80px;
-            margin: 0;
-            background: linear-gradient(to right, #fff, #9fd3ff, #6a7cff);
+            font-size: clamp(50px, 10vw, 110px);
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-secondary) 50%, var(--accent-primary) 100%);
             -webkit-background-clip: text;
-            background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px var(--accent-glow));
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeInUp 1s forwards ease-out;
         }
 
         .hero p {
             font-size: 24px;
-            color: #cfe8ff
+            color: var(--text-dim);
+            max-width: 750px;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeInUp 1s 0.3s forwards ease-out;
         }
 
-        /* SECTIONS */
-        .section {
-            display: flex;
-            gap: 60px;
-            padding: 100px 12%;
-            align-items: center;
-        }
-
-        .section:nth-child(even) {
-            flex-direction: row-reverse;
-            background: #040826
-        }
-
-        .section img {
-            width: 50%;
-            border-radius: 20px
-        }
-
-        .section .text {
-            width: 50%
-        }
-
-        .section h2 {
-            color: #9fd3ff;
-            font-size: 42px
-        }
-
-        /* LUMINA PANEL BUTTON */
-        #chat-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, #6a7cff, #4a5eff);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(106, 124, 255, 0.4);
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: var(--accent-secondary);
             font-size: 24px;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0.7;
+            cursor: pointer;
         }
 
-        #chat-button:hover {
-            transform: scale(1.1);
-        }
+        @keyframes fadeInUp { to { transform: translateY(0); opacity: 1; } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translate(-50%, 0);} 40% {transform: translate(-50%, -10px);} }
 
-        /* LUMINA PANEL - GLASSMORPHISM */
-        #chat-box {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 400px;
-            height: 600px;
-            background: rgba(11, 16, 40, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
+        /* --- Sections General Styling --- */
+        .section {
+            padding: 120px 10%;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            transform: translateY(20px) scale(0.95);
-            opacity: 0;
-            pointer-events: none;
-            transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 999;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-
-        #chat-box.open {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        #chat-header {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            text-align: left;
-            font-weight: 700;
-            font-size: 18px;
-            display: flex;
             align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        #chat-header::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background: #00ff88;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff88;
+        .section.visible { opacity: 1; transform: translateY(0); }
+
+        h2.section-title {
+            font-size: 56px;
+            margin-bottom: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #fff, var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.1));
         }
+
+        /* --- Facts Section --- */
+        .fact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            width: 100%;
+        }
+
+        .fact-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 35px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 15px 40px var(--accent-glow);
+            background: rgba(255,255,255,0.06);
+        }
+
+        .fact-card i {
+            font-size: 45px;
+            color: var(--accent-primary);
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 10px var(--accent-primary));
+        }
+
+        .fact-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .fact-card p {
+            color: var(--text-dim);
+            font-size: 16px;
+        }
+
+        /* --- Timeline Section --- */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--accent-primary), transparent);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 10px 50px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: 1s;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item.right {
+            left: 50%;
+            transform: translateX(50px);
+        }
+
+        .timeline-item.right.visible {
+            transform: translateX(0);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            right: -12px;
+            background-color: var(--bg-deep);
+            border: 4px solid var(--accent-primary);
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 0 15px var(--accent-primary);
+        }
+
+        .timeline-item.right::after { left: -12px; }
+
+        .timeline-content {
+            padding: 30px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-content h3 {
+            color: var(--accent-secondary);
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+
+        /* --- Gallery Section --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 35px;
+            width: 100%;
+        }
+
+        .gallery-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px var(--accent-glow);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: 0.6s;
+        }
+
+        .gallery-card:hover img { transform: scale(1.1); }
+
+        .gallery-card-info {
+            padding: 25px;
+            background: rgba(5, 8, 26, 0.8);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .gallery-card-info h3 { font-size: 22px; color: #fff; margin-bottom: 8px; }
+        .gallery-card-info p { font-size: 15px; color: var(--text-dim); }
+
+        /* --- Modal --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 4, 18, 0.96);
+            backdrop-filter: blur(20px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .modal.open { display: flex; opacity: 1; }
+
+        .modal-content {
+            background: var(--bg-dark);
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 35px;
+            padding: 45px;
+            position: relative;
+            display: flex;
+            gap: 45px;
+            box-shadow: 0 30px 100px rgba(0,0,0,0.8);
+            transform: scale(0.9);
+            transition: 0.4s;
+        }
+
+        .modal.open .modal-content { transform: scale(1); }
+
+        .modal-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover { color: #fff; transform: rotate(90deg); }
+
+        .modal-image {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 25px;
+            object-fit: cover;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .modal-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .modal-info h2 { font-size: 44px; color: var(--accent-secondary); margin-bottom: 25px; }
+        .modal-info p { font-size: 18px; color: var(--text-dim); line-height: 1.8; margin-bottom: 35px; }
+
+        .ask-lumina-btn {
+            background: linear-gradient(135deg, var(--accent-primary), #4a5eff);
+            border: none;
+            color: white;
+            padding: 16px 35px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            width: fit-content;
+            box-shadow: 0 10px 20px var(--accent-glow);
+        }
+
+        .ask-lumina-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 30px var(--accent-glow); }
+
+        /* --- Chat Panel --- */
+        #chatPanel {
+            position: fixed;
+            top: 0;
+            right: -480px;
+            width: 480px;
+            height: 100vh;
+            background: rgba(5, 8, 26, 0.98);
+            backdrop-filter: blur(45px);
+            border-left: 1px solid var(--glass-border);
+            z-index: 2500;
+            display: flex;
+            flex-direction: column;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #chatPanel.open {
+            right: 0;
+            box-shadow: -30px 0 80px rgba(0, 0, 0, 0.9);
+        }
+
+        .chat-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 { font-size: 22px; display: flex; align-items: center; gap: 15px; }
 
         #chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+            gap: 18px;
         }
 
-        /* MESSAGE BUBBLES */
         .msg {
             max-width: 85%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 14px;
+            padding: 14px 20px;
+            border-radius: 20px;
             line-height: 1.6;
-            animation: fadeIn 0.3s ease;
+            font-size: 15px;
+            animation: msgFade 0.4s forwards;
+            word-wrap: break-word;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
+        @keyframes msgFade { from { opacity: 0; transform: translateY(15px); } }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .user-msg { align-self: flex-end; background: var(--accent-primary); color: white; border-bottom-right-radius: 4px; }
+        .bot-msg { align-self: flex-start; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); border-bottom-left-radius: 4px; }
 
-        .user-msg {
-            align-self: flex-end;
-            background: #6a7cff;
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .bot-msg {
+        .typing-indicator {
+            display: none;
             align-self: flex-start;
-            background: rgba(255, 255, 255, 0.08);
-            color: #e0e0e0;
-            border-bottom-left-radius: 4px;
+            padding: 10px 20px;
+            gap: 5px;
         }
+        .dot { width: 8px; height: 8px; background: var(--text-dim); border-radius: 50%; animation: pulse 1s infinite alternate; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes pulse { to { opacity: 0.3; transform: scale(0.8); } }
 
-        .bot-msg b {
-            color: #9fd3ff;
-            display: block;
-            margin-bottom: 4px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        #chat-input-area {
+        .chat-suggestions {
+            padding: 15px 25px;
             display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 15px 20px;
+            flex-wrap: wrap;
             gap: 10px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .suggestion-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-dim);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .suggestion-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-primary); color: #fff; }
+
+        .chat-input-area {
+            padding: 25px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
 
         #chat-input {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            padding: 14px 25px;
+            border-radius: 100px;
             color: white;
             outline: none;
-            font-size: 14px;
-            padding: 12px 16px;
-            border-radius: 12px;
+            font-size: 15px;
             transition: 0.3s;
         }
 
-        #chat-input:focus {
-            border-color: #6a7cff;
-            background: rgba(255, 255, 255, 0.08);
-        }
+        #chat-input:focus { border-color: var(--accent-primary); background: rgba(255,255,255,0.1); }
 
-        #stop-btn {
-            background: rgba(255, 77, 77, 0.15);
-            border: 1px solid rgba(255, 77, 77, 0.3);
-            color: #ff4d4d;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
+        .send-btn, .stop-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .send-btn { background: var(--accent-primary); }
+        .stop-btn { background: #ff4a4a; display: none; }
+
+        /* --- Floating UI --- */
+        #chatToggle {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-primary), #4a5eff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 35px var(--accent-glow);
+            z-index: 2000;
+            transition: 0.4s;
+        }
+        #chatToggle:hover { transform: scale(1.1) rotate(10deg); }
+
+        #backToTop {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 55px;
+            height: 55px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
             display: none;
             align-items: center;
             justify-content: center;
+            color: white;
             cursor: pointer;
+            z-index: 1500;
             transition: 0.3s;
+            backdrop-filter: blur(10px);
         }
+        #backToTop:hover { background: var(--accent-primary); transform: translateY(-5px); }
 
-        #stop-btn:hover {
-            background: #ff4d4d;
-            color: white;
-        }
-    </style>
-
-    <style>
-        /* ... existing styles ... */
-
-        /* IDENTIFY SECTION */
-        .lumina {
+        /* --- Footer --- */
+        footer {
+            padding: 80px 10%;
+            background: var(--bg-deep);
+            border-top: 1px solid var(--glass-border);
             text-align: center;
-            padding: 100px 12%;
-            background: #020412;
+            color: var(--text-dim);
         }
 
-        .lumina h2 {
-            color: #9fd3ff;
-            font-size: 42px;
-        }
-
-        .lumina p {
-            color: #cfe8ff;
-            font-size: 18px;
-        }
-
-        .upload {
-            margin-top: 40px;
-        }
-
-        .upload input {
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #6a7cff;
-            background: #05081a;
-            color: white;
-        }
-
-        .upload button {
-            margin-top: 12px;
-            padding: 10px 20px;
-            background: #6a7cff;
-            border: none;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .upload button:hover {
-            background: #5568e6;
-        }
-
-        #result {
-            margin-top: 30px;
-            padding: 20px;
-            background: #05081a;
-            border-radius: 12px;
-            display: inline-block;
-            min-width: 300px;
-        }
-
-        #result h3 {
-            color: #9fd3ff;
-            margin-bottom: 10px;
-        }
-
-        #result p {
-            color: #cfe8ff;
-            font-size: 16px;
-        }
-
-        #note {
-            margin-top: 15px;
-            color: #ff4d4d;
-            font-size: 14px;
+        @media (max-width: 900px) {
+            #chatPanel { width: 100%; right: -100%; }
+            .modal-content { flex-direction: column; padding: 25px; }
+            .modal-image { max-width: 100%; }
+            .timeline-container::after { left: 40px; }
+            .timeline-item { width: 100%; padding-left: 80px; padding-right: 25px; text-align: left; }
+            .timeline-item::after { left: 28px; }
+            .right { left: 0%; transform: translateX(-50px); }
         }
     </style>
 </head>
-
 <body>
+    <div id="starfield"></div>
 
-    <a class="top-left-logo">
-        <img src="cosmera-logo.png">
-    </a>
-
-    <nav>
-        <a href="#learn">Learn</a>
-        <a href="#identify">Identify</a>
+    <nav id="navbar">
+        <a href="#home" class="nav-logo">
+            <img src="cosmera-logo.png" alt="Logo">
+            <span>Cosmera</span>
+        </a>
+        <div class="nav-links">
+            <a href="#home" class="active">Home</a>
+            <a href="#facts">Facts</a>
+            <a href="#timeline">Timeline</a>
+            <a href="#gallery">Gallery</a>
+            <a href="identify.html">Identify</a>
+        </div>
     </nav>
 
-    <section class="hero">
-        <div>
-            <h1>Cosmera</h1>
-            <p>Intelligence beyond the stars</p>
+    <header class="hero" id="home">
+        <div class="hero-bg"></div>
+        <h1>Explore The Infinite</h1>
+        <p>A cinematic journey through light-years of astronomical knowledge, powered by Lumina AI.</p>
+        <div class="scroll-indicator" onclick="window.scrollTo(0, 800)">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <section class="section" id="facts">
+        <h2 class="section-title">Did You Know?</h2>
+        <div class="fact-grid">
+            <div class="fact-card">
+                <i class="fas fa-atom"></i>
+                <h3>Stardust Origins</h3>
+                <p>Every atom of oxygen in your lungs and carbon in your muscles was forged in the hollow core of a dying star.</p>
+            </div>
+            <div class="fact-card">
+                <i class="fas fa-clock"></i>
+                <h3>Time Travel</h3>
+                <p>When you look at the Andromeda Galaxy, you are seeing light that left its source 2.5 million years ago.</p>
+            </div>
+            <div class="fact-card">
+                <i class="fas fa-wind"></i>
+                <h3>Cosmic Silence</h3>
+                <p>Because space is a vacuum, sound has no way to travel. The most violent supernova is completely silent.</p>
+            </div>
         </div>
     </section>
 
-    <section class="section" id="learn">
-        <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa">
-        <div class="text">
-            <h2>Galaxies</h2>
-            <p>Massive systems of stars, gas and dark matter bound by gravity.</p>
+    <section class="section" id="timeline">
+        <h2 class="section-title">Cosmic Genesis</h2>
+        <div class="timeline-container">
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>13.8 Billion Years Ago</h3>
+                    <p>The Big Bang: Energy, space, and time erupt into existence in a fraction of a second.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>13.4 Billion Years Ago</h3>
+                    <p>First Stars: The primordial clouds of hydrogen and helium collapse to form the first luminous giants.</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>4.6 Billion Years Ago</h3>
+                    <p>Solar System: A supernova shockwave triggers the formation of our Sun and the planetary disk.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>1990 AD</h3>
+                    <p>Hubble Launch: Human eyes finally pierce the deep darkness with a telescope orbiting Earth.</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="section">
-        <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca">
-        <div class="text">
-            <h2>Nebulae</h2>
-            <p>Cosmic clouds where stars form and evolve.</p>
+    <section class="section" id="gallery">
+        <h2 class="section-title">Celestial Gallery</h2>
+        <div class="gallery-grid">
+            <div class="gallery-card" onclick="openModal('Andromeda Galaxy', 'Our sister galaxy, a massive spiral structure consisting of over a trillion stars bound by gravity.', 'https://images.unsplash.com/photo-1462332420958-a05d1e002413?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1462332420958-a05d1e002413?auto=format&fit=crop&w=800&q=80" alt="Andromeda">
+                <div class="gallery-card-info">
+                    <h3>Andromeda Galaxy</h3>
+                    <p>M31 | Spiral Galaxy</p>
+                </div>
+            </div>
+            <div class="gallery-card" onclick="openModal('Eagle Nebula', 'Famous for the Pillars of Creation, this is a vast cluster where young stars erupt into life.', 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=800&q=80" alt="Nebula">
+                <div class="gallery-card-info">
+                    <h3>Eagle Nebula</h3>
+                    <p>M16 | Emission Nebula</p>
+                </div>
+            </div>
+            <div class="gallery-card" onclick="openModal('Pleiades Cluster', 'An open star cluster containing middle-aged, hot B-type stars in the constellation of Taurus.', 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=800&q=80')">
+                <img src="https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=800&q=80" alt="Stars">
+                <div class="gallery-card-info">
+                    <h3>Pleiades Cluster</h3>
+                    <p>M45 | Open Cluster</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="section">
-        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d">
-        <div class="text">
-            <h2>Stars</h2>
-            <p>Luminous spheres powered by nuclear fusion.</p>
+    <div id="chatToggle" onclick="toggleChat()"><i class="fas fa-comment-dots"></i></div>
+    <div id="backToTop" onclick="window.scrollTo(0,0)"><i class="fas fa-chevron-up"></i></div>
+
+    <aside id="chatPanel">
+        <div class="chat-header">
+            <h3><i class="fas fa-robot"></i> Lumina AI Intelligence</h3>
+            <button onclick="toggleChat()" style="background:none; border:none; color:white; font-size:28px; cursor:pointer;">&times;</button>
         </div>
-    </section>
-
-    <section class="lumina" id="identify">
-        <h2>Identify Cosmic Object</h2>
-        <p>Upload an image and let Lumina analyze it</p>
-
-        <div class="upload">
-            <input type="file" id="imageInput"><br>
-            <button onclick="sendImage()">Identify with Lumina</button>
+        <div id="chat-messages">
+            <div class="msg bot-msg">Hello, voyager. I am Lumina. What celestial mystery shall we unravel today?</div>
         </div>
+        <div class="typing-indicator" id="typing">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="chat-suggestions">
+            <button class="suggestion-btn" onclick="askQuick('What is a galaxy?')">What is a galaxy?</button>
+            <button class="suggestion-btn" onclick="askQuick('Identify an Image')" style="border-color: var(--accent-primary); color: white;"><i class="fas fa-camera"></i> Identify Image</button>
+            <button class="suggestion-btn" onclick="askQuick('How stars die?')">How stars die?</button>
+        </div>
+        <div class="chat-input-area">
+            <button class="suggestion-btn" onclick="window.location.href='identify.html'" style="padding: 10px; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; margin-right: 5px;" title="Identify Image">
+                <i class="fas fa-camera"></i>
+            </button>
+            <input type="text" id="chat-input" placeholder="Ask about the universe..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            <button class="stop-btn" id="stopBtn" onclick="stopChat()"><i class="fas fa-stop"></i></button>
+        </div>
+    </aside>
 
-        <div id="result"></div>
-        <div id="note">Lumina can sometimes make mistakes.</div>
-    </section>
-
-    <div id="chat-button">💬</div>
-
-    <div id="chat-box">
-        <div id="chat-header">Lumina Assistant</div>
-        <div id="chat-messages"></div>
-
-        <div id="chat-input-area">
-            <input id="chat-input" placeholder="Ask astronomy only...">
-            <button id="stop-btn">⏹</button>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <img src="" id="modalImg" class="modal-image">
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalDesc"></p>
+                <button class="ask-lumina-btn" onclick="askLuminaAbout()"><i class="fas fa-robot"></i> Ask Lumina about this</button>
+            </div>
         </div>
     </div>
 
+    <footer>
+        <p>&copy; 2026 Cosmera Astronomy. Guided by Lumina AI Intelligence.</p>
+    </footer>
+
     <script>
-        const btn = document.getElementById("chat-button");
-        const box = document.getElementById("chat-box");
-        const input = document.getElementById("chat-input");
-        const messages = document.getElementById("chat-messages");
-        const stopBtn = document.getElementById("stop-btn");
-
-        let controller = null;
-        let introduced = false;
-
-        /* OPEN PANEL */
-        btn.onclick = () => {
-            box.classList.toggle("open");
-
-            if (!introduced) {
-                const welcome = document.createElement("div");
-                welcome.className = "msg bot-msg";
-                welcome.innerHTML = "<b>Lumina</b> Hello! I'm your astronomy assistant. How can I help you explore the cosmos today?";
-                messages.appendChild(welcome);
-                introduced = true;
-            }
-        };
-
-        /* SEND MESSAGE */
-        input.addEventListener("keypress", async e => {
-            if (e.key === "Enter") {
-                const text = input.value.trim();
-                if (!text) return;
-                input.value = "";
-                streamChat(text);
-            }
-        });
-
-        async function streamChat(text, isAuto = false) {
-            if (!isAuto) {
-                const userBubble = document.createElement("div");
-                userBubble.className = "msg user-msg";
-                userBubble.innerText = text;
-                messages.appendChild(userBubble);
-            }
-
-            const botBubble = document.createElement("div");
-            botBubble.className = "msg bot-msg";
-            botBubble.innerHTML = "<b>Lumina</b> ";
-            messages.appendChild(botBubble);
-
-            const contentSpan = document.createElement("span");
-            botBubble.appendChild(contentSpan);
-
-            messages.scrollTop = messages.scrollHeight;
-
-            controller = new AbortController();
-            stopBtn.style.display = "flex";
-
-            try {
-                const res = await fetch("/chat", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: text }),
-                    signal: controller.signal
-                });
-
-                const reader = res.body.getReader();
-                const dec = new TextDecoder();
-
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    contentSpan.innerHTML += dec.decode(value, { stream: true });
-                    messages.scrollTop = messages.scrollHeight;
-                }
-            } catch (err) {
-                if (err.name !== 'AbortError') {
-                    contentSpan.innerHTML += " <br>⚠ <i>Connection lost</i>";
-                }
-            }
-
-            stopBtn.style.display = "none";
+        // Starfield
+        const starfield = document.getElementById('starfield');
+        for (let i = 0; i < 200; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const size = Math.random() * 2.5;
+            s.style.width = size + 'px'; s.style.height = size + 'px';
+            s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 100 + '%';
+            s.style.setProperty('--duration', (2 + Math.random() * 4) + 's');
+            starfield.appendChild(s);
         }
 
-        /* STOP */
-        stopBtn.onclick = () => {
-            if (controller) controller.abort();
-            stopBtn.style.display = "none";
+        // Scroll Reveal & Nav Highlight
+        window.onscroll = () => {
+            const nav = document.getElementById('navbar');
+            const bt = document.getElementById('backToTop');
+            if (window.scrollY > 80) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+            if (window.scrollY > 500) bt.style.display = 'flex'; else bt.style.display = 'none';
+
+            document.querySelectorAll('.section, .timeline-item').forEach(el => {
+                if (window.scrollY > el.offsetTop - window.innerHeight + 150) el.classList.add('visible');
+            });
+
+            // Nav Highlight
+            const sections = ['home', 'facts', 'timeline', 'gallery'];
+            let current = '';
+            sections.forEach(s => {
+                const el = document.getElementById(s);
+                if (window.scrollY >= el.offsetTop - 200) current = s;
+            });
+            document.querySelectorAll('.nav-links a').forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').includes(current)) a.classList.add('active');
+            });
         };
 
-        async function sendImage() {
-            const fileInput = document.getElementById("imageInput");
-            const result = document.getElementById("result");
+        // Modal
+        function openModal(t, d, i) {
+            document.getElementById('modalTitle').innerText = t;
+            document.getElementById('modalDesc').innerText = d;
+            document.getElementById('modalImg').src = i;
+            const m = document.getElementById('modal');
+            m.style.display = 'flex';
+            setTimeout(() => m.classList.add('open'), 10);
+        }
+        function closeModal() {
+            const m = document.getElementById('modal');
+            m.classList.remove('open');
+            setTimeout(() => m.style.display = 'none', 400);
+        }
 
-            if (!fileInput.files.length) {
-                result.innerText = "Please select an image";
+        // Chat Logic
+        let abortController = null;
+        function toggleChat() { document.getElementById('chatPanel').classList.toggle('open'); }
+        function askQuick(txt) { 
+            if(txt === 'Identify an Image') {
+                window.location.href = 'identify.html';
                 return;
             }
-
-            const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
-
-            result.innerText = "Lumina is analyzing...";
-
+            document.getElementById('chat-input').value = txt; 
+            sendMessage(); 
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+            addMsg(msg, 'user-msg'); input.value = '';
+            
+            const sb = document.getElementById('sendBtn');
+            const stb = document.getElementById('stopBtn');
+            const typ = document.getElementById('typing');
+            
+            sb.style.display = 'none'; stb.style.display = 'flex';
+            typ.style.display = 'flex';
+            
+            abortController = new AbortController();
             try {
-                const response = await fetch("/predict", {
-                    method: "POST",
-                    body: formData
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: msg}),
+                    signal: abortController.signal
                 });
-
-                if (!response.ok) throw new Error("Server error");
-
-                const data = await response.json();
-                result.innerText = `Lumina identifies this as: ${data.prediction} (Confidence: ${Math.round(data.confidence * 100)}%)`;
-
-                // Integrate with Lumina AI for automatic explanation
-                if (!box.classList.contains("open")) {
-                    box.classList.add("open");
-                    introduced = true;
+                const reader = response.body.getReader();
+                typ.style.display = 'none';
+                let botDiv = addMsg('', 'bot-msg');
+                while (true) {
+                    const {done, value} = await reader.read();
+                    if (done) break;
+                    botDiv.innerText += new TextDecoder().decode(value);
+                    document.getElementById('chat-messages').scrollTop = 99999;
                 }
-                streamChat(`I just identified an object as a ${data.prediction}. Can you explain what that is?`, true);
-            } catch (err) {
-                result.innerText = "⚠ Identification failed. Is the server running?";
+            } catch (e) {
+                typ.style.display = 'none';
+                if (e.name === 'AbortError') addMsg("(Stopped)", 'bot-msg');
+                else addMsg("Lumina link interrupted.", 'bot-msg');
+            } finally {
+                sb.style.display = 'flex'; stb.style.display = 'none';
+                abortController = null;
             }
         }
+        function stopChat() { if (abortController) abortController.abort(); }
+        function addMsg(t, c) {
+            const d = document.createElement('div'); d.className = `msg ${c}`; d.innerText = t;
+            const log = document.getElementById('chat-messages'); log.appendChild(d);
+            log.scrollTop = 99999; return d;
+        }
+        function askLuminaAbout() {
+            const t = document.getElementById('modalTitle').innerText;
+            closeModal();
+            setTimeout(() => { if(!document.getElementById('chatPanel').classList.contains('open')) toggleChat(); askQuick('Tell me more about the ' + t); }, 500);
+        }
     </script>
-
-
-
 </body>
-
 </html>
