@@ -1,7 +1,7 @@
 # Cosmera 🌌
 Intelligence beyond the stars.
 
-Cosmera is an AI-powered astronomy platform that can identify cosmic objects (Galaxies, Nebulae, Stars, Asteroids) using a custom-trained CNN and features a local AI assistant named **Lumina**.
+Cosmera is an immersive, AI-powered astronomy platform. It can classify cosmic objects (Galaxies, Nebulae, Stars, Asteroids) using a custom-trained PyTorch Convolutional Neural Network (CNN). It also features **Lumina**, a highly intelligent, context-aware AI astronomy assistant powered by the **NVIDIA NIM API** (Llama 3).
 
 ## 🚀 How to Run
 
@@ -12,17 +12,18 @@ cd Cosmera
 ```
 
 ### 2. Install Dependencies
-Make sure you have Python installed. Then run:
+Make sure you have Python installed. We recommend setting up a virtual environment (`.venv`), then run:
 ```bash
 pip install -r requirements.txt
 ```
+*(Note for cloud deployments: The requirements are optimized for CPU environments using `torch==...cpu` to save limits).*
 
-### 3. Set Up Lumina AI (Local LLM)
-The chat assistant requires **Ollama** and the `llama3` model:
-1. Download and install [Ollama](https://ollama.com/).
-2. Run the model in your terminal:
-   ```bash
-   ollama run llama3
+### 3. Set Up Lumina AI (NVIDIA API)
+Cosmera's assistant uses the cutting-edge NVIDIA NIM API for fast, intelligent reasoning instead of relying on heavy local hardware constraints.
+1. Create a `.env` file in the root directory.
+2. Add your NVIDIA API key inside the file:
+   ```env
+   NVIDIA_API_KEY=your_api_key_here
    ```
 
 ### 4. Run the Application
@@ -32,17 +33,19 @@ python app.py
 ```
 Or use uvicorn directly:
 ```bash
-uvicorn app:app --host 127.0.0.1 --port 8000
+uvicorn app:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 ### 5. Access the Platform
-Open your browser and go to:
+Open your browser and navigate to:
 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-## 🛠 Features
-- **Cosmic Object Identification**: Upload a space image to classify it.
-- **Lumina Assistant**: Streamed chat interface for astronomy questions.
-- **Interactive UI**: Modern, glassmorphic design for exploring the cosmos.
+## 🌟 Intelligent Features
+- **Cosmic Object Identification**: Upload a space image to instantly classify it via our custom PyTorch model.
+- **Dynamic AI Explanations**: Once an object is identified, Lumina automatically analyzes it and generates a precise scientific explanation and formation summary.
+- **Context-Aware Memory**: The Lumina Assistant doesn't just chat—it remembers! You can ask follow-up questions about objects you just scanned.
+- **Advanced UI Features**: Enjoy realistic AI typing animations, feedback rating widgets, and a glassmorphic design that reacts to your interaction.
+- **Cross-Analysis Comparison**: Upload two cosmic data signatures side-by-side to trigger an AI-driven scientific comparison (works best with astronomical images).
 
 ---
 Developed by **Azeem**
