@@ -7,10 +7,18 @@ import torch.nn as nn
 from torchvision import transforms
 import io
 import os
-import httpx
+from openai import AsyncOpenAI
+from dotenv import load_dotenv
 from fastapi.responses import StreamingResponse, FileResponse
 import json
 import uvicorn
+import httpx
+
+load_dotenv()
+client = AsyncOpenAI(
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key=os.getenv("NVIDIA_API_KEY")
+)
 
 
 app = FastAPI(title="Lumina AI")
@@ -103,44 +111,45 @@ async def predict(file: UploadFile = File(...)):
 @app.post("/chat")
 async def chat(message: dict):
     user_msg = message.get("message", "")
+    history = message.get("history", [])
 
-    prompt = f"""
-You are Lumina, an astronomy learning assistant inside the Cosmera platform.
-
+    sys_prompt = """
+You are Lumina, a highly intelligent, calm, and scientific AI astronomy assistant inside the Cosmera platform.
+If the user asks for a simple explanation, explain like a teacher. If they want advanced concepts, be highly scientific.
+Always be contextual. Remember previous interactions in the conversation.
 Rules:
-- Only answer questions related to astronomy, space, planets, stars, galaxies, nebulae, asteroids, cosmology, or space science.
-- If a question is unrelated, politely say you can only discuss astronomy topics.
-- Keep explanations clear for students.
-- Be friendly but concise.
-- Make the response short and to the point.
-
-User question: {user_msg}
+- Only answer questions related to astronomy, space, planets, stars, galaxies, etc.
+- If a question is unrelated, politely refuse.
+- Be concise but highly informative and realistic.
 """
+    messages = [{"role": "system", "content": sys_prompt}]
+    for h in history:
+        messages.append({"role": h["role"], "content": h["content"]})
+    messages.append({"role": "user", "content": user_msg})
 
     async def generate():
         try:
-            async with httpx.AsyncClient() as client:
-                async with client.stream(
-                    "POST",
-                    "http://localhost:11434/api/generate",
-                    json={
-                        "model": "llama3",
-                        "prompt": prompt,
-                        "stream": True
-                    },
-                    timeout=30
-                ) as r:
-                    r.raise_for_status()
-                    async for line in r.aiter_lines():
-                        if line:
-                            data = json.loads(line)
-                            if "response" in data:
-                                yield data["response"]
+            response = await client.chat.completions.create(
+                model="meta/llama3-8b-instruct",
+                messages=messages,
+                temperature=0.3,
+                max_tokens=1024,
+                stream=True,
+            )
+            async for chunk in response:
+                if chunk.choices and chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
         except Exception as e:
-            print(f"Ollama Error: {e}")
-            yield f"I'm having trouble connecting to my brain (Ollama) right now. Error: {str(e)}"
+            print(f"NVIDIA API Error: {e}")
+            yield f"I'm having trouble connecting to my central neural network right now. Error: {str(e)}"
 
     return StreamingResponse(generate(), media_type="text/plain")
+
+@app.get("/apod")
+async def get_apod():
+    async with httpx.AsyncClient() as c:
+        res = await c.get("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY")
+        return res.json()
 
 # ===== Serve Static Files =====
 # This allows the HTML files and the logo to be served by FastAPI

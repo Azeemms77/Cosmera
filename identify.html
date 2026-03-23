@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Identify | Cosmera AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="cosmic-animations.css">
     <style>
         :root {
             --bg-deep: #020412;
@@ -16,6 +18,7 @@
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-dim: #9fd3ff;
         }
+
         body {
             background: var(--bg-deep);
             color: white;
@@ -29,9 +32,39 @@
             padding: 120px 20px 60px;
             overflow-x: hidden;
         }
-        #starfield { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; pointer-events:none; background: radial-gradient(circle at center, #0a0e2a 0%, #020412 100%); }
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--d) infinite; }
-        @keyframes twinkle { 0%,100% {opacity:0.3; transform: scale(1);} 50% {opacity:1; transform: scale(1.2);} }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(circle at center, #0a0e2a 0%, #020412 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--d) infinite;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
 
         .container {
             background: var(--glass);
@@ -42,7 +75,7 @@
             width: 100%;
             max-width: 750px;
             text-align: center;
-            box-shadow: 0 30px 100px rgba(0,0,0,0.6);
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.6);
             position: relative;
             z-index: 1;
             margin-bottom: 40px;
@@ -55,13 +88,30 @@
             margin: 40px 0;
             cursor: pointer;
             transition: 0.4s;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
             position: relative;
         }
-        .upload-zone:hover { border-color: var(--accent-primary); background: rgba(106, 124, 255, 0.06); }
-        
-        #preview { width: 100%; max-height: 400px; object-fit: contain; border-radius: 20px; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .upload-icon { font-size: 60px; color: var(--accent-primary); margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--accent-glow)); }
+
+        .upload-zone:hover {
+            border-color: var(--accent-primary);
+            background: rgba(106, 124, 255, 0.06);
+        }
+
+        #preview {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 20px;
+            display: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .upload-icon {
+            font-size: 60px;
+            color: var(--accent-primary);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
+        }
 
         .btn-main {
             background: linear-gradient(135deg, var(--accent-primary), #4a5eff);
@@ -79,6 +129,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .btn-main::after {
             content: '';
             position: absolute;
@@ -86,50 +137,123 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
             transform: scale(0);
             transition: 0.6s;
         }
-        .btn-main:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 45px var(--accent-glow); }
-        .btn-main:hover::after { transform: scale(1); }
 
-        .loader { display: none; margin-top: 40px; }
-        .spin {
-            width: 60px; height: 60px; border: 4px solid var(--glass-border);
-            border-top-color: var(--accent-primary); border-radius: 50%;
-            animation: spin 0.8s infinite linear; margin: 0 auto 20px;
+        .btn-main:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 45px var(--accent-glow);
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .btn-main:hover::after {
+            transform: scale(1);
+        }
+
+        .loader {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .spin {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--glass-border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 0.8s infinite linear;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
         #result {
             margin-top: 50px;
             display: none;
             text-align: left;
             padding: 40px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             border-radius: 35px;
             animation: slideUp 0.6s forwards;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } }
 
-        .res-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .confidence-label { background: var(--accent-primary); padding: 6px 18px; border-radius: 20px; font-weight: 700; font-size: 14px; }
-        
-        .prog-bg { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; margin-bottom: 25px; overflow: hidden; }
-        .prog-bar { background: linear-gradient(to right, var(--accent-primary), #9fd3ff); height: 100%; width: 0; transition: width 1.5s cubic-bezier(0.1, 0, 0.2, 1); }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        .res-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .confidence-label {
+            background: var(--accent-primary);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .prog-bg {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .prog-bar {
+            background: linear-gradient(to right, var(--accent-primary), #9fd3ff);
+            height: 100%;
+            width: 0;
+            transition: width 1.5s cubic-bezier(0.1, 0, 0.2, 1);
+        }
 
         .learn-more-btn {
-            display: inline-flex; align-items: center; gap: 12px;
-            background: var(--accent-primary); border: none;
-            color: white; padding: 12px 25px; border-radius: 100px;
-            text-decoration: none; font-weight: 600; margin-top: 20px; transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--accent-primary);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: 0.3s;
             cursor: pointer;
         }
-        .learn-more-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px var(--accent-glow); }
 
-        .back-nav { position: absolute; top: 30px; left: 30px; color: var(--text-dim); text-decoration: none; font-weight: 600; z-index: 10; }
-        .back-nav:hover { color: white; }
+        .learn-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px var(--accent-glow);
+        }
+
+        .back-nav {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .back-nav:hover {
+            color: white;
+        }
 
         /* --- Full Chat System --- */
         #chatPanel {
@@ -146,44 +270,193 @@
             flex-direction: column;
             transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #chatPanel.open { right: 0; box-shadow: -30px 0 80px rgba(0, 0, 0, 0.9); }
-        .chat-header { padding: 30px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
-        #chat-messages { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { max-width: 85%; padding: 14px 20px; border-radius: 20px; line-height: 1.6; font-size: 15px; animation: msgFade 0.4s forwards; }
-        @keyframes msgFade { from { opacity: 0; transform: translateY(15px); } }
-        .user-msg { align-self: flex-end; background: var(--accent-primary); color: white; border-bottom-right-radius: 4px; }
-        .bot-msg { align-self: flex-start; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); border-bottom-left-radius: 4px; }
-        .chat-input-area { padding: 25px; border-top: 1px solid var(--glass-border); display: flex; gap: 15px; align-items: center; }
-        #chat-input { flex: 1; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); padding: 14px 25px; border-radius: 100px; color: white; outline: none; }
-        .send-btn { width: 50px; height: 50px; border: none; border-radius: 50%; color: white; cursor: pointer; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; }
-        .stop-btn { width: 50px; height: 50px; border: none; border-radius: 50%; color: white; cursor: pointer; background: #ff4a4a; display: none; align-items: center; justify-content: center; }
-        #chatToggle { position: fixed; bottom: 40px; right: 40px; width: 70px; height: 70px; background: linear-gradient(135deg, var(--accent-primary), #4a5eff); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; cursor: pointer; box-shadow: 0 10px 35px var(--accent-glow); z-index: 2000; transition: 0.4s; }
-        #chatToggle:hover { transform: scale(1.1) rotate(10deg); }
-        .typing-indicator { display: none; align-self: flex-start; padding: 10px 20px; gap: 5px; }
-        .dot { width: 8px; height: 8px; background: var(--text-dim); border-radius: 50%; animation: pulse 1s infinite alternate; }
-        .dot:nth-child(2) { animation-delay: 0.2s; }
-        .dot:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes pulse { to { opacity: 0.3; transform: scale(0.8); } }
-        
-        footer { width: 100%; text-align: center; padding: 40px 0; margin-top: auto; color: var(--text-dim); border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); position: relative; z-index: 2; }
+
+        #chatPanel.open {
+            right: 0;
+            box-shadow: -30px 0 80px rgba(0, 0, 0, 0.9);
+        }
+
+        .chat-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .msg {
+            max-width: 85%;
+            padding: 14px 20px;
+            border-radius: 20px;
+            line-height: 1.6;
+            font-size: 15px;
+            animation: msgFade 0.4s forwards;
+        }
+
+        @keyframes msgFade {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+        }
+
+        .user-msg {
+            align-self: flex-end;
+            background: var(--accent-primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-msg {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 25px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        #chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            padding: 14px 25px;
+            border-radius: 100px;
+            color: white;
+            outline: none;
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            background: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stop-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            background: #ff4a4a;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #chatToggle {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-primary), #4a5eff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 35px var(--accent-glow);
+            z-index: 2000;
+            transition: 0.4s;
+        }
+
+        #chatToggle:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            padding: 10px 20px;
+            gap: 5px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-dim);
+            border-radius: 50%;
+            animation: pulse 1s infinite alternate;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+            to {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+        }
+
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: auto;
+            color: var(--text-dim);
+            border-top: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
     </style>
 </head>
+
 <body>
     <div id="starfield"></div>
-    <nav style="position: fixed; top: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1200px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 100px; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000;">
-        <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; font-weight: 700; font-size: 24px;">
-            <img src="cosmera-logo.png" alt="Logo" style="height: 35px; filter: drop-shadow(0 0 10px var(--accent-primary));">
+    <nav
+        style="position: fixed; top: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1200px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 100px; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000;">
+        <a href="index.html"
+            style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; font-weight: 700; font-size: 24px;">
+            <img src="cosmera-logo.png" alt="Logo"
+                style="height: 35px; filter: drop-shadow(0 0 10px var(--accent-primary));">
             <span>Cosmera</span>
         </a>
         <div style="display: flex; gap: 30px;">
-            <a href="index.html" style="color: var(--text-dim); text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.3s;">Home</a>
-            <a href="identify.html" style="color: white; text-decoration: none; font-weight: 700; font-size: 15px;">Identify</a>
-            <a href="compare.html" style="color: var(--text-dim); text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.3s;">Compare</a>
+            <a href="index.html"
+                style="color: var(--text-dim); text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.3s;">Home</a>
+            <a href="identify.html"
+                style="color: white; text-decoration: none; font-weight: 700; font-size: 15px;">Identify</a>
+            <a href="compare.html"
+                style="color: var(--text-dim); text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.3s;">Compare</a>
         </div>
     </nav>
 
     <div class="container">
-        <h1 style="font-size: 44px; margin-bottom: 10px;">Lumina <span style="color:var(--accent-primary)">Pattern Identifier</span></h1>
+        <h1 style="font-size: 44px; margin-bottom: 10px;">Lumina <span style="color:var(--accent-primary)">Pattern
+                Identifier</span></h1>
         <p style="opacity:0.7; font-size: 19px;">Deconstruct celestial data using AI-link</p>
 
         <div class="upload-zone" onclick="document.getElementById('imageInput').click()">
@@ -202,7 +475,12 @@
         <button class="btn-main" id="analyzeBtn" onclick="sendImage()">INITIALIZE SCAN</button>
 
         <div class="loader" id="loader">
-            <div class="spin"></div>
+            <div class="cosmic-loader">
+                <div class="core-planet">🪐</div>
+                <div class="orbit-ring">
+                    <div class="orbit-moon">🌕</div>
+                </div>
+            </div>
             <p style="letter-spacing: 3px; font-weight:600; font-size: 14px;">INTERPRETING SPATIAL VECTORS...</p>
         </div>
 
@@ -210,7 +488,8 @@
             <div class="res-header">
                 <div>
                     <h2 id="resTitle" style="margin:0; font-size: 32px;">OBJECT</h2>
-                    <p id="lowConfWarning" style="display:none; color:#ff4a4a; font-size:13px; margin-top:5px; font-weight:600;">
+                    <p id="lowConfWarning"
+                        style="display:none; color:#ff4a4a; font-size:13px; margin-top:5px; font-weight:600;">
                         <i class="fas fa-exclamation-triangle"></i> Lumina is uncertain about this object.
                     </p>
                 </div>
@@ -219,17 +498,25 @@
             <div class="prog-bg">
                 <div class="prog-bar" id="progBar"></div>
             </div>
-            
-            <div id="knowledgeCard" style="background:rgba(255,255,255,0.03); padding:25px; border-radius:20px; border:1px solid var(--glass-border); margin-bottom:25px;">
-                <h4 style="color:var(--accent-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">Lumina Database Entry</h4>
+
+            <div id="knowledgeCard"
+                style="background:rgba(255,255,255,0.03); padding:25px; border-radius:20px; border:1px solid var(--glass-border); margin-bottom:25px;">
+                <h4
+                    style="color:var(--accent-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">
+                    Lumina Database Entry</h4>
                 <p id="resDescription" style="line-height:1.7; opacity:0.8; font-size: 16px; margin-bottom:15px;"></p>
-                <div id="formationExplanation" style="border-top:1px solid var(--glass-border); padding-top:15px; font-size:14px; color:var(--text-dim);"></div>
+                <div id="formationExplanation"
+                    style="border-top:1px solid var(--glass-border); padding-top:15px; font-size:14px; color:var(--text-dim);">
+                </div>
             </div>
 
             <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
-                <button class="suggestion-btn" onclick="askQuick('Explain this object in detail')">Explain this object</button>
-                <button class="suggestion-btn" onclick="askQuick('Where are these found in our galaxy?')">Where are these found?</button>
-                <button class="suggestion-btn" onclick="askQuick('How is this object formed?')">How are they formed?</button>
+                <button class="suggestion-btn" onclick="askQuick('Explain this object in detail')">Explain this
+                    object</button>
+                <button class="suggestion-btn" onclick="askQuick('Where are these found in our galaxy?')">Where are
+                    these found?</button>
+                <button class="suggestion-btn" onclick="askQuick('How is this object formed?')">How are they
+                    formed?</button>
             </div>
 
             <button class="learn-more-btn" onclick="askLuminaAboutResult()">
@@ -243,19 +530,25 @@
     <aside id="chatPanel">
         <div class="chat-header">
             <h3><i class="fas fa-robot"></i> Lumina Assistant</h3>
-            <button onclick="toggleChat()" style="background:none; border:none; color:white; font-size:28px; cursor:pointer;">&times;</button>
+            <button onclick="toggleChat()"
+                style="background:none; border:none; color:white; font-size:28px; cursor:pointer;">&times;</button>
         </div>
         <div id="chat-messages">
             <div class="msg bot-msg">Neural link active. How can I assist your identification process?</div>
         </div>
         <div class="typing-indicator" id="typing">
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
         </div>
         <div class="chat-input-area">
-            <button class="send-btn" onclick="window.location.reload()" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); margin-right: 5px;" title="New Identification">
+            <button class="send-btn" onclick="window.location.reload()"
+                style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); margin-right: 5px;"
+                title="New Identification">
                 <i class="fas fa-camera"></i>
             </button>
-            <input type="text" id="chat-input" placeholder="Ask about the universe..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <input type="text" id="chat-input" placeholder="Ask about the universe..."
+                onkeypress="if(event.key==='Enter') sendMessage()">
             <button class="send-btn" id="sendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
             <button class="stop-btn" id="stopBtn" onclick="stopChat()"><i class="fas fa-stop"></i></button>
         </div>
@@ -268,13 +561,13 @@
     <script>
         // Starfield
         const sf = document.getElementById('starfield');
-        for(let i=0; i<150; i++){
+        for (let i = 0; i < 150; i++) {
             const s = document.createElement('div');
             s.className = 'star';
-            const size = Math.random()*2.5;
-            s.style.width=size+'px'; s.style.height=size+'px';
-            s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*100+'%';
-            s.style.setProperty('--d', (2+Math.random()*4)+'s');
+            const size = Math.random() * 2.5;
+            s.style.width = size + 'px'; s.style.height = size + 'px';
+            s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 100 + '%';
+            s.style.setProperty('--d', (2 + Math.random() * 4) + 's');
             sf.appendChild(s);
         }
 
@@ -292,9 +585,12 @@
             }
         }
 
+        let chatHistory = [];
+        let lastIdentifiedObj = "";
+
         async function sendImage() {
             const input = document.getElementById('imageInput');
-            if(!input.files[0]) return;
+            if (!input.files[0]) return;
             document.getElementById('analyzeBtn').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
             document.getElementById('result').style.display = 'none';
@@ -303,50 +599,53 @@
             try {
                 const response = await fetch('/predict', { method: 'POST', body: fd });
                 const d = await response.json();
-                const facts = {
-                    'galaxy': {
-                        desc: 'A massive system of stars, gas, and dark matter. The light scan indicates a complex galactic nucleus.',
-                        formation: 'Formed from primordial gas clouds collapsing under gravity shortly after the Big Bang.'
-                    },
-                    'nebula': {
-                        desc: 'A stellar nursery where cosmic birth is occurring. High ionization detected in the hydrogen clouds.',
-                        formation: 'Created by the cooling and condensing of interstellar gas or remnants of dying stars.'
-                    },
-                    'stars': {
-                        desc: 'Luminous plasma engine fusing atoms at its core. Our analysis shows active spectral signatures.',
-                        formation: 'Born deep within molecular clouds when density reaches a critical point for nuclear fusion.'
-                    },
-                    'asteroids': {
-                        desc: 'Rocky relics from the dawn of creation preserving early solar disk signatures.',
-                        formation: 'Planetary building blocks that never merged into larger worlds during the solar system creation.'
-                    }
-                };
-                setTimeout(() => {
+                setTimeout(async () => {
                     document.getElementById('loader').style.display = 'none';
                     document.getElementById('analyzeBtn').style.display = 'inline-block';
                     document.getElementById('result').style.display = 'block';
                     const label = d.prediction.toLowerCase();
+                    lastIdentifiedObj = label;
                     document.getElementById('resTitle').innerText = label.toUpperCase();
                     const conf = Math.round(d.confidence * 100);
                     document.getElementById('resConfidence').innerText = conf + '% MATCH';
                     document.getElementById('progBar').style.width = conf + '%';
-                    
-                    const objData = facts[label] || {desc: "Pattern identified. Neural database sync confirmed.", formation: "Unknown formation vector."};
-                    document.getElementById('resDescription').innerText = objData.desc;
-                    document.getElementById('formationExplanation').innerHTML = `<strong>Formation:</strong> ${objData.formation}`;
+
+                    document.getElementById('resDescription').innerText = "Querying Lumina neural network for scientific facts...";
+                    document.getElementById('formationExplanation').innerHTML = "";
 
                     const lowConf = document.getElementById('lowConfWarning');
-                    if(conf < 50) lowConf.style.display = 'block'; else lowConf.style.display = 'none';
+                    if (conf < 50) lowConf.style.display = 'block'; else lowConf.style.display = 'none';
+
+                    // Contextual history update
+                    chatHistory.push({role: "user", content: `I just scanned an image that looks like a ${label} with ${conf}% confidence.`});
                     
+                    // Auto-trigger explanation
+                    try {
+                        const initResp = await fetch('/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: `Provide a short 2 sentence explanation of a ${label} and 1 sentence on how it is formed.`, history: chatHistory })
+                        });
+                        const reader = initResp.body.getReader();
+                        let explanation = "";
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+                            explanation += new TextDecoder().decode(value);
+                            document.getElementById('resDescription').innerText = explanation;
+                        }
+                        chatHistory.push({role: "assistant", content: explanation});
+                    } catch(e) {}
+
                     // Automatically open chat after a few seconds or show a hint
                     setTimeout(() => {
-                        if(!document.getElementById('chatPanel').classList.contains('open')) {
-                            addMsg("I've analyzed the " + label + ". It matches our archives with " + conf + "% certainty. What would you like to know about it?", 'bot-msg');
+                        if (!document.getElementById('chatPanel').classList.contains('open')) {
+                            addMsg("I've analyzed the " + label + ". What would you like to know about it?", 'bot-msg');
                         }
                     }, 2000);
                 }, 1500);
-            } catch(e) { 
-                alert("Neural link failed."); 
+            } catch (e) {
+                alert("Neural link failed.");
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('analyzeBtn').style.display = 'inline-block';
             }
@@ -369,19 +668,32 @@
             try {
                 const response = await fetch('/chat', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message: msg}),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg, history: chatHistory }),
                     signal: abortController.signal
                 });
+                chatHistory.push({role: "user", content: msg});
+                
                 const reader = response.body.getReader();
                 typ.style.display = 'none';
                 let botDiv = addMsg('', 'bot-msg');
+                let fullBotReply = "";
                 while (true) {
-                    const {done, value} = await reader.read();
+                    const { done, value } = await reader.read();
                     if (done) break;
-                    botDiv.innerText += new TextDecoder().decode(value);
+                    let textChunk = new TextDecoder().decode(value);
+                    fullBotReply += textChunk;
+                    botDiv.innerHTML += textChunk.replace(/\n/g, "<br>");
                     document.getElementById('chat-messages').scrollTop = 99999;
                 }
+                chatHistory.push({role: "assistant", content: fullBotReply});
+                
+                // Add rating feedback system
+                let ratingDiv = document.createElement("div");
+                ratingDiv.style.marginTop = "10px";
+                ratingDiv.innerHTML = `<span style="font-size:12px;opacity:0.6;margin-right:10px;">Rate this response:</span> <i class="fas fa-thumbs-up" style="cursor:pointer;opacity:0.6;margin-right:8px;" onclick="this.style.color='var(--accent-secondary)';this.style.opacity='1';"></i> <i class="fas fa-thumbs-down" style="cursor:pointer;opacity:0.6;" onclick="this.style.color='#ff4a4a';this.style.opacity='1';"></i>`;
+                botDiv.appendChild(ratingDiv);
+                
             } catch (e) {
                 typ.style.display = 'none';
                 if (e.name === 'AbortError') addMsg("(Stopped)", 'bot-msg');
@@ -399,10 +711,12 @@
         }
         function askLuminaAboutResult() {
             const t = document.getElementById('resTitle').innerText;
-            if(!document.getElementById('chatPanel').classList.contains('open')) toggleChat();
+            if (!document.getElementById('chatPanel').classList.contains('open')) toggleChat();
             document.getElementById('chat-input').value = 'Tell me more about ' + t;
             sendMessage();
         }
     </script>
+    <script src="cosmic-animations.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,205 @@
+/* cosmic-animations.css */
+
+/* 1 & 4. Background Animated Space Objects and Comets */
+.space-object {
+    position: fixed;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+/* 2. Floating Rocket */
+.floating-rocket {
+    position: fixed;
+    top: 25%;
+    left: -100px;
+    font-size: 40px;
+    z-index: 0;
+    pointer-events: none;
+    animation: flyRight 12s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(255,100,0,0.5));
+}
+
+@keyframes flyRight {
+    0% { transform: translate(-100px, 0) rotate(45deg); opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 1; }
+    100% { transform: translate(120vw, -100px) rotate(45deg); opacity: 0; }
+}
+
+/* 3. Orbiting Planet Animation */
+.orbiting-planet-container {
+    position: fixed;
+    top: 20%;
+    right: 15%;
+    width: 60px;
+    height: 60px;
+    z-index: -1;
+    pointer-events: none;
+}
+.planet {
+    font-size: 70px;
+    filter: drop-shadow(0 0 15px rgba(106, 124, 255, 0.5));
+}
+.moon-orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120px;
+    height: 120px;
+    margin-top: -60px;
+    margin-left: -60px;
+    border-radius: 50%;
+    animation: orbitSpin 6s linear infinite;
+}
+.moon {
+    position: absolute;
+    top: -5px;
+    left: 45px;
+    font-size: 20px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.8));
+}
+
+@keyframes orbitSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 4. Moving Comets */
+.comet {
+    position: fixed;
+    top: -50px;
+    right: -50px;
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(255,255,255,1), transparent);
+    z-index: -1;
+    pointer-events: none;
+    animation: cometStreak 5s linear infinite;
+    opacity: 0;
+    transform: rotate(-45deg);
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes cometStreak {
+    0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
+    5% { opacity: 1; }
+    10% { transform: translate(-100vw, 100vh) rotate(-45deg); opacity: 0; }
+    100% { opacity: 0; }
+}
+
+.comet:nth-child(2) { animation-delay: 2.5s; top: 10%; right: -50px; }
+.comet:nth-child(3) { animation-delay: 4.8s; top: -50px; right: 30%; }
+
+/* 5. Interactive Hover Animation */
+.section, .gallery-card, .fact-card, .compare-box, .knowledge-card, .glossary-item {
+    position: relative;
+}
+.section:hover .hover-star, 
+.gallery-card:hover .hover-star, 
+.fact-card:hover .hover-star, 
+.compare-box:hover .hover-star, 
+.knowledge-card:hover .hover-star, 
+.glossary-item:hover .hover-star {
+    opacity: 1;
+    transform: scale(1) rotate(45deg);
+}
+.hover-star {
+    position: absolute;
+    color: var(--accent-secondary);
+    font-size: 18px;
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+    filter: drop-shadow(0 0 5px var(--accent-secondary));
+    z-index: 10;
+}
+.hover-star-1 { top: -15px; right: -15px; }
+.hover-star-2 { bottom: -15px; left: -15px; transition-delay: 0.1s; }
+
+
+/* 6. Animated Astronaut near Chat */
+.chat-astronaut {
+    position: absolute;
+    top: -70px;
+    left: 30px;
+    font-size: 50px;
+    animation: floatAstronaut 3s ease-in-out infinite;
+    pointer-events: none;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+    z-index: 2501;
+}
+@keyframes floatAstronaut {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* 7. Parallax Space Background (multiple star layers) */
+#parallax-starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    pointer-events: none;
+    overflow: hidden;
+}
+.layer {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+}
+.layer-1 { background: transparent; }
+.layer-2 { background: transparent; }
+.layer-3 { background: transparent; }
+
+/* 8. Loading Animation for Lumina */
+.loader { display: none; margin-top: 40px; }
+.cosmic-loader {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+}
+.cosmic-loader .core-planet {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 35px;
+    filter: drop-shadow(0 0 10px var(--accent-primary));
+}
+.cosmic-loader .orbit-ring {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border: 3px solid transparent;
+    border-top-color: var(--accent-secondary);
+    border-bottom-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: cosmicSpin 1.2s linear infinite;
+}
+.cosmic-loader .orbit-moon {
+    position: absolute;
+    top: -6px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    filter: drop-shadow(0 0 8px white);
+}
+@keyframes cosmicSpin { to { transform: rotate(360deg); } }
+
+/* 9. Cartoon Cosmic Illustrations */
+.cosmic-icon-illustration {
+    font-size: 60px;
+    display: block;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 15px rgba(106, 124, 255, 0.4));
+    animation: floatIcon 4s ease-in-out infinite;
+}
+@keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}

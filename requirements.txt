@@ -4,4 +4,5 @@ python-multipart
 Pillow
 torch
 torchvision
-httpx
+openai
+python-dotenv

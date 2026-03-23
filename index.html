@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="cosmic-animations.css">
     
     <style>
         :root {
@@ -748,7 +749,7 @@
         <h2 class="section-title">Celestial Learning</h2>
         <div class="gallery-grid">
             <div class="gallery-card">
-                <img src="https://images.unsplash.com/photo-1462332420958-a05d1e002413?auto=format&fit=crop&w=400&q=80" alt="Galaxies">
+                <div style="text-align: center; padding: 60px 0;"><span class="cosmic-icon-illustration">🌌</span></div>
                 <div class="gallery-card-info">
                     <h3>Galaxies</h3>
                     <p style="margin-bottom:15px;">Massive systems of stars, gas, and dark matter. Our Milky Way is one of billions.</p>
@@ -756,7 +757,7 @@
                 </div>
             </div>
             <div class="gallery-card">
-                <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=400&q=80" alt="Nebulae">
+                <div style="text-align: center; padding: 60px 0;"><span class="cosmic-icon-illustration">🌠</span></div>
                 <div class="gallery-card-info">
                     <h3>Nebulae</h3>
                     <p style="margin-bottom:15px;">Interstellar clouds of dust and gas where new stars are born from cosmic gravity.</p>
@@ -764,7 +765,7 @@
                 </div>
             </div>
             <div class="gallery-card">
-                <img src="https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=400&q=80" alt="Stars">
+                <div style="text-align: center; padding: 60px 0;"><span class="cosmic-icon-illustration">🌟</span></div>
                 <div class="gallery-card-info">
                     <h3>Stars</h3>
                     <p style="margin-bottom:15px;">Luminous spheres of plasma held together by their own gravity, fusing atoms in their cores.</p>
@@ -772,7 +773,7 @@
                 </div>
             </div>
             <div class="gallery-card">
-                <img src="https://images.unsplash.com/photo-1516331138075-f3adc1e149cd?auto=format&fit=crop&w=400&q=80" alt="Asteroids">
+                <div style="text-align: center; padding: 60px 0;"><span class="cosmic-icon-illustration">☄️</span></div>
                 <div class="gallery-card-info">
                     <h3>Asteroids</h3>
                     <p style="margin-bottom:15px;">Rocky remnants leftover from the early formation of our solar system, billions of years ago.</p>
@@ -1112,5 +1113,6 @@
             setTimeout(() => { if(!document.getElementById('chatPanel').classList.contains('open')) toggleChat(); askQuick('Tell me more about the ' + t); }, 500);
         }
     </script>
+    <script src="cosmic-animations.js"></script>
 </body>
 </html>
