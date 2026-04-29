@@ -43,22 +43,26 @@ class LuminaCNN(nn.Module):
         super().__init__()
         self.conv = nn.Sequential(
             nn.Conv2d(3, 16, 3, padding=1),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.MaxPool2d(2),
 
             nn.Conv2d(16, 32, 3, padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(2),
 
             nn.Conv2d(32, 64, 3, padding=1),
+            nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.MaxPool2d(2)
         )
         self.fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(64 * 16 * 16, 128),
+            nn.Linear(64 * 32 * 32, 512),
             nn.ReLU(),
-            nn.Linear(128, num_classes)
+            nn.Dropout(0.5),
+            nn.Linear(512, num_classes)
         )
 
     def forward(self, x):
@@ -67,7 +71,7 @@ class LuminaCNN(nn.Module):
         return x
 
 # ===== Classes =====
-classes = ["asteroids", "galaxy", "nebula", "stars"]
+classes = ["asteroids", "galaxy", "nebula", "stars", "unidentified_objects"]
 
 # ===== Load Lumina Model =====
 model = LuminaCNN(len(classes))
@@ -77,8 +81,9 @@ model.eval()
 
 # ===== Image Transform =====
 transform = transforms.Compose([
-    transforms.Resize((128, 128)),
-    transforms.ToTensor()
+    transforms.Resize((256, 256)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
 # ===== Prediction Endpoint =====
@@ -130,7 +135,7 @@ Rules:
     async def generate():
         try:
             response = await client.chat.completions.create(
-                model="meta/llama3-8b-instruct",
+                model="meta/llama-3.1-8b-instruct",
                 messages=messages,
                 temperature=0.3,
                 max_tokens=1024,

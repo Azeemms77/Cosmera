@@ -605,7 +605,7 @@
                     document.getElementById('result').style.display = 'block';
                     const label = d.prediction.toLowerCase();
                     lastIdentifiedObj = label;
-                    document.getElementById('resTitle').innerText = label.toUpperCase();
+                    document.getElementById('resTitle').innerText = label.toUpperCase().replace(/_/g, ' ');
                     const conf = Math.round(d.confidence * 100);
                     document.getElementById('resConfidence').innerText = conf + '% MATCH';
                     document.getElementById('progBar').style.width = conf + '%';

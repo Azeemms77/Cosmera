@@ -7,4 +7,10 @@ __pycache__/
 .db
 .sqlite3
 # Model weights - uncoment if you don't want to push 8MB model
-# cosmera_model.pth
+cosmera_model.pth
+*.pth
+*.h5
+
+# Datasets
+dataset/
+*.zip
