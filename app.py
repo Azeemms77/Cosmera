@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from PIL import Image
 import torch
 import torch.nn as nn
-from torchvision import transforms
+
 import io
 import os
 from openai import AsyncOpenAI
@@ -79,17 +79,18 @@ if os.path.exists("cosmera_model.pth"):
     model.load_state_dict(torch.load("cosmera_model.pth", map_location="cpu"))
 model.eval()
 
-# ===== Image Transform =====
-transform = transforms.Compose([
-    transforms.Resize((256, 256)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
+
 
 # ===== Prediction Endpoint =====
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    # Read and transform image
+    from torchvision import transforms  # lazy import
+    transform = transforms.Compose([
+        transforms.Resize((256, 256)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+
     contents = await file.read()
     img = Image.open(io.BytesIO(contents)).convert("RGB")
     img_tensor = transform(img).unsqueeze(0)
